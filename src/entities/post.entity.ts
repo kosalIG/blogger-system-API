@@ -13,7 +13,7 @@ export class Posts {
   thumbnail?: string;
 
   @Column()
-  title: string;
+  tittle: string;
 
   @Column({ nullable: true })
   description?: string;

@@ -10,6 +10,9 @@ export class Comments {
   userId: number;
 
   @Column()
+  postId: number;
+
+  @Column()
   comment: string;
 
   @Column('enum', { enum: Status, default: Status.ACTIVE })

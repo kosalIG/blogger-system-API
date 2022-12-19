@@ -21,7 +21,6 @@ export class AuthController {
   @Post('register')
   @UsePipes(ValidationPipe)
   register(@Body() body: UserBody) {
-    console.log(body);
     return this.service.register(body);
   }
 }

@@ -28,7 +28,7 @@ export class UsersService {
 
   async getSingleUser(id: number) {
     if (Number.isNaN(id)) {
-      throw new BadRequestException('id must be a number');
+      throw new BadRequestException({ message: 'id must be a number' });
     }
 
     const data = await this.userRepository.findOne({
@@ -60,11 +60,11 @@ export class UsersService {
   async removeUser(id: number) {
     await this.getSingleUser(id);
 
-    const user = await this.userRepository.update(id, {
+    const { affected } = await this.userRepository.update(id, {
       status: Status.DELETE,
     });
 
-    if (user) {
+    if (affected) {
       return true;
     }
   }

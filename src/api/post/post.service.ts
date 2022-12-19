@@ -30,6 +30,7 @@ export class PostService {
       .where('post.status IN (:...status)', {
         status: [Status.ACTIVE, Status.INACTIVE],
       })
+      .orderBy('post.createAt', 'DESC')
       .getMany();
 
     return { results };
@@ -37,7 +38,7 @@ export class PostService {
 
   async findOne(id: number) {
     if (Number.isNaN(id)) {
-      throw new BadRequestException('id must be a number');
+      throw new BadRequestException({ message: 'id must be a number' });
     }
 
     const data = await this.postRepository
@@ -53,7 +54,10 @@ export class PostService {
     if (data) {
       return { data };
     } else {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        { message: 'Post not found' },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
@@ -70,11 +74,11 @@ export class PostService {
   async remove(id: number) {
     await this.findOne(id);
 
-    const user = await this.postRepository.update(id, {
+    const { affected } = await this.postRepository.update(id, {
       status: Status.DELETE,
     });
 
-    if (user) {
+    if (affected) {
       return true;
     }
   }
